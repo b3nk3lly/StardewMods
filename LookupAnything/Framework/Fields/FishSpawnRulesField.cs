@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
@@ -24,56 +25,71 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="label">A short field label.</param>
-    /// <param name="fish">The fish item data.</param>
-    public FishSpawnRulesField(GameHelper gameHelper, string label, ParsedItemData fish)
+    /// <param name="fishes">The fish item data.</param>
+    public FishSpawnRulesField(GameHelper gameHelper, string label, params ParsedItemData[] fishes)
         : base(label)
     {
-        this.Checkboxes = this.GetConditions(gameHelper, fish).ToArray();
-        this.HasValue = this.Checkboxes.Any();
+        this.CheckboxLists = this.BuildCheckboxLists(gameHelper, fishes).ToArray();
+        this.HasValue = this.CheckboxLists.Any();
     }
 
 
     /*********
     ** Private methods
     *********/
+    private IEnumerable<CheckboxList> BuildCheckboxLists(GameHelper gameHelper, params ParsedItemData[] fishes)
+    {
+        foreach (ParsedItemData fish in fishes)
+        {
+            // get spawn data
+            FishSpawnData? spawnRules = gameHelper.GetFishSpawnRules(fish);
+            if (spawnRules?.Locations?.Any() != true)
+                continue;
+
+            CheckboxList checkboxes = new CheckboxList(this.GetConditions(gameHelper, spawnRules));
+            if (fishes.Length > 1)
+            {
+                Item fishItem = ItemRegistry.Create(fish.ItemId);
+                checkboxes.IntroData = new CheckboxList.Intro(fish.DisplayName, gameHelper.GetSprite(fishItem));
+            }
+
+            yield return checkboxes;
+        }
+    }
+
     /// <summary>Get the formatted checkbox conditions to display.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-    /// <param name="fish">The fish item data.</param>
-    private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetConditions(GameHelper gameHelper, ParsedItemData fish)
+    /// <param name="spawnRules">The fish spawn data.</param>
+    private IEnumerable<CheckboxList.Checkbox> GetConditions(GameHelper gameHelper, FishSpawnData spawnRules)
     {
-        // get spawn data
-        FishSpawnData? spawnRules = gameHelper.GetFishSpawnRules(fish);
-        if (spawnRules?.Locations?.Any() != true)
-            yield break;
-
         // not caught uet
         if (spawnRules.IsUnique)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_NotCaughtYet(), !Game1.player.fishCaught.ContainsKey(fish.QualifiedItemId));
+            yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_NotCaughtYet(), isChecked: !Game1.player.fishCaught.ContainsKey(spawnRules.FishItem.ItemId));
 
         // fishing level
         if (spawnRules.MinFishingLevel > 0)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_MinFishingLevel(level: spawnRules.MinFishingLevel), Game1.player.FishingLevel >= spawnRules.MinFishingLevel);
+            yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_MinFishingLevel(level: spawnRules.MinFishingLevel), isChecked: Game1.player.FishingLevel >= spawnRules.MinFishingLevel);
 
         // extended family quest
         if (spawnRules.IsLegendaryFamily)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_ExtendedFamilyQuestActive(), Game1.player.team.SpecialOrderRuleActive("LEGENDARY_FAMILY"));
+            yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_ExtendedFamilyQuestActive(), isChecked: Game1.player.team.SpecialOrderRuleActive("LEGENDARY_FAMILY"));
 
         // weather
         if (spawnRules.Weather == FishSpawnWeather.Sunny)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_WeatherSunny(), !Game1.isRaining);
+            yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_WeatherSunny(), isChecked: !Game1.isRaining);
         else if (spawnRules.Weather == FishSpawnWeather.Rainy)
-            yield return this.GetCondition(I18n.Item_FishSpawnRules_WeatherRainy(), Game1.isRaining);
+            yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_WeatherRainy(), isChecked: Game1.isRaining);
 
         // time of day
         if (spawnRules.TimesOfDay?.Any() == true)
         {
-            yield return this.GetCondition(
-                label: I18n.Item_FishSpawnRules_Time(
+            yield return new CheckboxList.Checkbox(
+                text: I18n.Item_FishSpawnRules_Time(
                     times: I18n.List(
                         spawnRules.TimesOfDay.Select(p => I18n.Generic_Range(Game1.getTimeOfDayString(p.MinTime), Game1.getTimeOfDayString(p.MaxTime)).ToString())
                     )
                 ),
-                isMet: spawnRules.TimesOfDay.Any(p => Game1.timeOfDay >= p.MinTime && Game1.timeOfDay <= p.MaxTime)
+                isChecked: spawnRules.TimesOfDay.Any(p => Game1.timeOfDay >= p.MinTime && Game1.timeOfDay <= p.MaxTime)
             );
         }
 
@@ -84,27 +100,27 @@ internal class FishSpawnRulesField : CheckboxListField
 
             // seasons
             if (firstLocation.Seasons.Count == 4)
-                yield return this.GetCondition(I18n.Item_FishSpawnRules_SeasonAny(), true);
+                yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_SeasonAny(), isChecked: true);
             else
             {
-                yield return this.GetCondition(
-                    label: I18n.Item_FishSpawnRules_SeasonList(
+                yield return new CheckboxList.Checkbox(
+                    text: I18n.Item_FishSpawnRules_SeasonList(
                         seasons: I18n.List(
                             firstLocation.Seasons.Select(gameHelper.TranslateSeason)
                         )
                     ),
-                    isMet: firstLocation.Seasons.Contains(Game1.currentSeason)
+                    isChecked: firstLocation.Seasons.Contains(Game1.currentSeason)
                 );
             }
 
             // locations
-            yield return this.GetCondition(
-                label: I18n.Item_FishSpawnRules_Locations(
+            yield return new CheckboxList.Checkbox(
+                text: I18n.Item_FishSpawnRules_Locations(
                     locations: I18n.List(
                         spawnRules.Locations.Select(gameHelper.GetLocationDisplayName).OrderBy(p => p)
                     )
                 ),
-                isMet: spawnRules.MatchesLocation(Game1.currentLocation.Name)
+                isChecked: spawnRules.MatchesLocation(Game1.currentLocation.Name)
             );
         }
         else
@@ -131,24 +147,8 @@ internal class FishSpawnRulesField : CheckboxListField
             }
 
             bool hasMatch = spawnRules.Locations.Any(p => p.LocationId == Game1.currentLocation.Name && p.Seasons.Contains(Game1.currentSeason));
-            yield return this.GetCondition(summary, hasMatch);
+            yield return new CheckboxList.Checkbox(text: summary.ToArray(), isChecked: hasMatch);
         }
-    }
-
-    /// <summary>Get a condition formatted for checkbox rendering.</summary>
-    /// <param name="label">The display text for the condition.</param>
-    /// <param name="isMet">Whether the condition is met.</param>
-    private KeyValuePair<IFormattedText[], bool> GetCondition(string label, bool isMet)
-    {
-        return CheckboxListField.Checkbox(text: label, value: isMet);
-    }
-
-    /// <summary>Get a condition formatted for checkbox rendering.</summary>
-    /// <param name="label">The display text for the condition.</param>
-    /// <param name="isMet">Whether the condition is met.</param>
-    private KeyValuePair<IFormattedText[], bool> GetCondition(IEnumerable<IFormattedText> label, bool isMet)
-    {
-        return CheckboxListField.Checkbox(text: label.ToArray(), value: isMet);
     }
 
     /// <summary>Get whether all locations specify the same seasons.</summary>
