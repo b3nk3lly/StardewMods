@@ -10,10 +10,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
 
     internal class Intro
     {
-        public IFormattedText[] Text;
+        public string Text;
         public SpriteInfo? Sprite;
 
-        public Intro(IFormattedText[] text, SpriteInfo? sprite = null)
+        public Intro(string text, SpriteInfo? sprite = null)
         {
             this.Text = text;
             this.Sprite = sprite;
@@ -44,9 +44,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         /// <summary>The intro text to show before the checkboxes.</summary>
         public Intro? Intro;
 
-        public CheckboxList(IEnumerable<Checkbox> checkboxes)
+        public CheckboxList(IEnumerable<Checkbox> checkboxes) : this(checkboxes.ToArray())
         {
-            this.Checkboxes = checkboxes.ToArray();
         }
 
         public CheckboxList(params Checkbox[] checkboxes)
@@ -56,19 +55,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
 
         /// <summary>Add intro text before the checkboxes.</summary>
         /// <param name="text">The text to show before the checkboxes.</param>
-        public CheckboxList AddIntro(params IFormattedText[] text)
+        public CheckboxList AddIntro(string text, SpriteInfo? sprite = null)
         {
-            this.Intro = new Intro(text);
+            this.Intro = new Intro(text, sprite);
             return this;
-        }
-
-        /// <summary>Add intro text before the checkboxes.</summary>
-        /// <param name="text">The text to show before the checkboxes.</param>
-        public CheckboxList AddIntro(params string[] text)
-        {
-            return this.AddIntro(
-                text.Select(p => (IFormattedText)new FormattedText(p)).ToArray()
-            );
         }
     }
 }

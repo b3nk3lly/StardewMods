@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 CheckboxList checkboxes = new CheckboxList(this.GetConditions(gameHelper, spawnRules));
                 if (fishIDs.Length > 1)
                 {
-                    checkboxes.AddIntro(fish.DisplayName);
+                    checkboxes.Intro = new Intro(fish.DisplayName, gameHelper.GetSprite(fish));
                 }
 
                 yield return checkboxes;

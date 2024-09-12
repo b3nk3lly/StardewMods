@@ -26,15 +26,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="checkboxLists">A list of checkbox labels and values to display.</param>
-        public CheckboxListField(string label, IEnumerable<CheckboxList> checkboxLists)
-            : this(label)
-        {
-            this.CheckboxLists = checkboxLists.ToArray();
-        }
-
-        /// <summary>Construct an instance.</summary>
-        /// <param name="label">A short field label.</param>
-        /// <param name="checkboxLists">A list of checkbox labels and values to display.</param>
         public CheckboxListField(string label, params CheckboxList[] checkboxLists)
             : this(label)
         {
@@ -57,7 +48,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             foreach (CheckboxList checkboxList in this.CheckboxLists)
             {
                 if (checkboxList.Intro != null)
-                    topOffset += spriteBatch.DrawTextBlock(font, checkboxList.Intro.Text, new Vector2(position.X, position.Y + topOffset), wrapWidth).Y;
+                    topOffset += this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, checkboxList.Intro.Text, Color.Black, checkboxList.Intro.Sprite, new Vector2(lineHeight)).Y;
 
                 foreach (Checkbox checkbox in checkboxList.Checkboxes)
                 {
