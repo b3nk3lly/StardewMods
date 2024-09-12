@@ -47,10 +47,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             foreach (CheckboxList checkboxList in this.CheckboxLists)
             {
-                if (checkboxList.Intro != null)
-                    topOffset += this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, checkboxList.Intro.Text, Color.Black, checkboxList.Intro.Sprite, new Vector2(lineHeight)).Y;
+                if (checkboxList.IntroData != null)
+                    topOffset += this.DrawIconText(spriteBatch, font, new Vector2(position.X, position.Y + topOffset), wrapWidth, checkboxList.IntroData.Text, Color.Black, checkboxList.IntroData.Sprite, new Vector2(lineHeight)).Y;
 
-                foreach (Checkbox checkbox in checkboxList.Checkboxes)
+                foreach (CheckboxList.Checkbox checkbox in checkboxList.Checkboxes)
                 {
                     // draw icon
                     spriteBatch.Draw(

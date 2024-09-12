@@ -48,19 +48,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
                 else
                 {
                     CheckboxList checkboxList = new CheckboxList(
-                        new Checkbox(
+                        new CheckboxList.Checkbox(
                             text: I18n.Puzzle_IslandShrine_Solution_North(shrine.northPedestal.requiredItem.Value.DisplayName),
                             value: complete || shrine.northPedestal.match.Value
                         ),
-                        new Checkbox(
+                        new CheckboxList.Checkbox(
                             text: I18n.Puzzle_IslandShrine_Solution_East(shrine.eastPedestal.requiredItem.Value.DisplayName),
                             value: complete || shrine.eastPedestal.match.Value
                         ),
-                        new Checkbox(
+                        new CheckboxList.Checkbox(
                             text: I18n.Puzzle_IslandShrine_Solution_South(shrine.southPedestal.requiredItem.Value.DisplayName),
                             value: complete || shrine.southPedestal.match.Value
                         ),
-                        new Checkbox(
+                        new CheckboxList.Checkbox(
                             text: I18n.Puzzle_IslandShrine_Solution_West(shrine.westPedestal.requiredItem.Value.DisplayName),
                             value: complete || shrine.westPedestal.match.Value
                         )

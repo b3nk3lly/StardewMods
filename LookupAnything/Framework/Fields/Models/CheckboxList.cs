@@ -7,42 +7,50 @@ using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
 {
-
-    internal class Intro
-    {
-        public string Text;
-        public SpriteInfo? Sprite;
-
-        public Intro(string text, SpriteInfo? sprite = null)
-        {
-            this.Text = text;
-            this.Sprite = sprite;
-        }
-    }
-
-    internal class Checkbox
-    {
-        public IFormattedText[] Text;
-        public bool Value;
-
-        public Checkbox(bool value, params IFormattedText[] text)
-        {
-            this.Text = text;
-            this.Value = value;
-        }
-
-        public Checkbox(bool value, string text) : this(value, new FormattedText(text))
-        {
-        }
-    }
-
     internal class CheckboxList
     {
+        internal class Intro
+        {
+            /*********
+            ** Accessors
+            *********/
+            public string Text { get; }
+            public SpriteInfo? Sprite { get; }
+
+            public Intro(string text, SpriteInfo? sprite = null)
+            {
+                this.Text = text;
+                this.Sprite = sprite;
+            }
+        }
+
+        internal class Checkbox
+        {
+            /*********
+            ** Accessors
+            *********/
+            public IFormattedText[] Text;
+            public bool Value;
+
+            public Checkbox(bool value, params IFormattedText[] text)
+            {
+                this.Text = text;
+                this.Value = value;
+            }
+
+            public Checkbox(bool value, string text) : this(value, new FormattedText(text))
+            {
+            }
+        }
+
+        /*********
+        ** Accessors
+        *********/
         /// <summary>The checkbox values to display.</summary>
-        public Checkbox[] Checkboxes;
+        public Checkbox[] Checkboxes { get; }
 
         /// <summary>The intro text to show before the checkboxes.</summary>
-        public Intro? Intro;
+        public Intro? IntroData { get; set; }
 
         public CheckboxList(IEnumerable<Checkbox> checkboxes) : this(checkboxes.ToArray())
         {
@@ -57,7 +65,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         /// <param name="text">The text to show before the checkboxes.</param>
         public CheckboxList AddIntro(string text, SpriteInfo? sprite = null)
         {
-            this.Intro = new Intro(text, sprite);
+            this.IntroData = new Intro(text, sprite);
             return this;
         }
     }

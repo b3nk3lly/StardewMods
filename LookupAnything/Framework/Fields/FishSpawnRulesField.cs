@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 CheckboxList checkboxes = new CheckboxList(this.GetConditions(gameHelper, spawnRules));
                 if (fishIDs.Length > 1)
                 {
-                    checkboxes.Intro = new Intro(fish.DisplayName, gameHelper.GetSprite(fish));
+                    checkboxes.IntroData = new CheckboxList.Intro(fish.DisplayName, gameHelper.GetSprite(fish));
                 }
 
                 yield return checkboxes;
@@ -61,26 +61,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the formatted checkbox conditions to display.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="fishID">The fish ID.</param>
-        private IEnumerable<Checkbox> GetConditions(GameHelper gameHelper, FishSpawnData spawnRules)
+        private IEnumerable<CheckboxList.Checkbox> GetConditions(GameHelper gameHelper, FishSpawnData spawnRules)
         {
             // not caught uet
             if (spawnRules.IsUnique)
-                yield return new Checkbox(text: I18n.Item_FishSpawnRules_NotCaughtYet(), value: !Game1.player.fishCaught.ContainsKey(spawnRules.FishID));
+                yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_NotCaughtYet(), value: !Game1.player.fishCaught.ContainsKey(spawnRules.FishID));
 
             // fishing level
             if (spawnRules.MinFishingLevel > 0)
-                yield return new Checkbox(text: I18n.Item_FishSpawnRules_MinFishingLevel(level: spawnRules.MinFishingLevel), value: Game1.player.FishingLevel >= spawnRules.MinFishingLevel);
+                yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_MinFishingLevel(level: spawnRules.MinFishingLevel), value: Game1.player.FishingLevel >= spawnRules.MinFishingLevel);
 
             // weather
             if (spawnRules.Weather == FishSpawnWeather.Sunny)
-                yield return new Checkbox(text: I18n.Item_FishSpawnRules_WeatherSunny(), value: !Game1.isRaining);
+                yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_WeatherSunny(), value: !Game1.isRaining);
             else if (spawnRules.Weather == FishSpawnWeather.Rainy)
-                yield return new Checkbox(text: I18n.Item_FishSpawnRules_WeatherRainy(), value: Game1.isRaining);
+                yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_WeatherRainy(), value: Game1.isRaining);
 
             // time of day
             if (spawnRules.TimesOfDay?.Any() == true)
             {
-                yield return new Checkbox(
+                yield return new CheckboxList.Checkbox(
                     text: I18n.Item_FishSpawnRules_Time(
                         times: I18n.List(
                             spawnRules.TimesOfDay.Select(p => I18n.Generic_Range(gameHelper.FormatMilitaryTime(p.MinTime), gameHelper.FormatMilitaryTime(p.MaxTime)).ToString())
@@ -97,10 +97,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // seasons
                 if (firstLocation.Seasons.Count == 4)
-                    yield return new Checkbox(text: I18n.Item_FishSpawnRules_SeasonAny(), value: true);
+                    yield return new CheckboxList.Checkbox(text: I18n.Item_FishSpawnRules_SeasonAny(), value: true);
                 else
                 {
-                    yield return new Checkbox(
+                    yield return new CheckboxList.Checkbox(
                         text: I18n.Item_FishSpawnRules_SeasonList(
                             seasons: I18n.List(
                                 firstLocation.Seasons.Select(gameHelper.TranslateSeason)
@@ -111,7 +111,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 }
 
                 // locations
-                yield return new Checkbox(
+                yield return new CheckboxList.Checkbox(
                     text: I18n.Item_FishSpawnRules_Locations(
                         locations: I18n.List(
                             spawnRules.Locations.Select(p => p.DisplayName).OrderBy(p => p)
@@ -144,7 +144,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 }
 
                 bool hasMatch = spawnRules.Locations.Any(p => p.LocationId == Game1.currentLocation.Name && p.Seasons.Contains(Game1.currentSeason));
-                yield return new Checkbox(text: summary.ToArray(), value: hasMatch);
+                yield return new CheckboxList.Checkbox(text: summary.ToArray(), value: hasMatch);
             }
         }
 

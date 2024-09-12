@@ -243,7 +243,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // show items wanted
             if (questsDone <= maxQuests)
             {
-                var checkboxes = new List<Checkbox>();
+                var checkboxes = new List<CheckboxList.Checkbox>();
                 for (int i = 0; i < maxQuests; i++)
                 {
                     string wantedKey = cave.IndexForRequest(i);
@@ -251,7 +251,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         continue;
 
                     checkboxes.Add(
-                        new Checkbox(
+                        new CheckboxList.Checkbox(
                             text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName,
                             value: questsDone > i
                         )
@@ -289,7 +289,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
                 int kills = questData.Targets.Sum(Game1.stats.getMonstersKilled);
                 string goalName = TokenParser.ParseText(questData.DisplayName);
-                var checkbox = new Checkbox(
+                var checkbox = new CheckboxList.Checkbox(
                     text: I18n.Monster_AdventureGuild_EradicationGoal(name: goalName, count: kills, requiredCount: questData.Count),
                     value: kills >= questData.Count
                 );
