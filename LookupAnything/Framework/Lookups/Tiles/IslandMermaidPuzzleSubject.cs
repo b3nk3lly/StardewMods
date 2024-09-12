@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
                     int[] sequence = this.GameHelper.Metadata.PuzzleSolutions.IslandMermaidFluteBlockSequence;
                     int songIndex = location.songIndex;
                     var checkboxes = sequence
-                        .Select((pitch, i) => CheckboxList.Checkbox(text: this.Stringify(pitch), value: complete || songIndex >= i))
+                        .Select((pitch, i) => new Checkbox(text: this.Stringify(pitch), value: complete || songIndex >= i))
                         .ToArray();
 
                     yield return new CheckboxListField(I18n.Puzzle_Solution(),

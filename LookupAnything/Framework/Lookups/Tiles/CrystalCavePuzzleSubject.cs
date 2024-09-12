@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
                         var checkboxes = cave
                             .currentCrystalSequence
                             .Select((id, index) =>
-                                CheckboxList.Checkbox(
+                                new Checkbox(
                                     text: this.Stringify(id + 1),
                                     value: cave.currentCrystalSequenceIndex.Value > index
                                 )

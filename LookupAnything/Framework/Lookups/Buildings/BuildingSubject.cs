@@ -352,39 +352,39 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         /// <summary>Get the upgrade levels for a building, for use with a checkbox field.</summary>
         /// <param name="building">The building to check.</param>
         /// <param name="upgradeLevel">The current upgrade level, if applicable.</param>
-        private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetUpgradeLevelSummary(Building building, int? upgradeLevel)
+        private IEnumerable<Checkbox> GetUpgradeLevelSummary(Building building, int? upgradeLevel)
         {
             // TODO: animal buildings were de-hardcoded in Stardew Valley 1.6, so we should generate this info from Data/Buildings instead.
 
             // barn
             if (this.IsBarn(building))
             {
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Barn_0(), value: true);
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Barn_1(), value: upgradeLevel >= 1);
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Barn_2(), value: upgradeLevel >= 2);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Barn_0(), value: true);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Barn_1(), value: upgradeLevel >= 1);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Barn_2(), value: upgradeLevel >= 2);
             }
 
             // cabin
             else if (building.GetIndoors() is Cabin)
             {
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Cabin_0(), value: true);
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Cabin_1(), value: upgradeLevel >= 1);
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Cabin_2(), value: upgradeLevel >= 2);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Cabin_0(), value: true);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Cabin_1(), value: upgradeLevel >= 1);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Cabin_2(), value: upgradeLevel >= 2);
             }
 
             // coop
             else if (this.IsCoop(building))
             {
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Coop_0(), value: true);
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Coop_1(), value: upgradeLevel >= 1);
-                yield return CheckboxList.Checkbox(text: I18n.Building_Upgrades_Coop_2(), value: upgradeLevel >= 2);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Coop_0(), value: true);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Coop_1(), value: upgradeLevel >= 1);
+                yield return new Checkbox(text: I18n.Building_Upgrades_Coop_2(), value: upgradeLevel >= 2);
             }
         }
 
         /// <summary>Get a fish pond's population gates for display.</summary>
         /// <param name="pond">The fish pond.</param>
         /// <param name="data">The fish pond data.</param>
-        private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetPopulationGates(FishPond pond, FishPondData data)
+        private IEnumerable<Checkbox> GetPopulationGates(FishPond pond, FishPondData data)
         {
             bool foundNextQuest = false;
             foreach (FishPondPopulationGateData gate in this.GameHelper.GetFishPondPopulationGates(data))
@@ -394,7 +394,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 // done
                 if (pond.lastUnlockedPopulationGate.Value >= gate.RequiredPopulation)
                 {
-                    yield return CheckboxList.Checkbox(text: I18n.Building_FishPond_Quests_Done(count: newPopulation), value: true);
+                    yield return new Checkbox(text: I18n.Building_FishPond_Quests_Done(count: newPopulation), value: true);
                     continue;
                 }
 
@@ -429,7 +429,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                         - pond.daysSinceSpawn.Value;
                     result += $"; {I18n.Building_FishPond_Quests_Available(relativeDate: this.GetRelativeDateStr(nextQuestDays))}";
                 }
-                yield return CheckboxList.Checkbox(text: result, value: false);
+                yield return new Checkbox(text: result, value: false);
             }
         }
     }
