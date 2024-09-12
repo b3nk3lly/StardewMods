@@ -8,6 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI.Utilities;
 using StardewValley;
@@ -250,7 +251,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         continue;
 
                     checkboxes.Add(
-                        CheckboxListField.Checkbox(
+                        CheckboxList.Checkbox(
                             text: ItemRegistry.GetDataOrErrorItem(wantedKey).DisplayName,
                             value: questsDone > i
                         )
@@ -258,7 +259,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 }
 
                 if (checkboxes.Any())
-                    yield return new CheckboxListField(I18n.TrashBearOrGourmand_ItemWanted(), checkboxes);
+                    yield return new CheckboxListField(I18n.TrashBearOrGourmand_ItemWanted(), new CheckboxList(checkboxes));
             }
 
             // show progress
@@ -288,11 +289,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
                 int kills = questData.Targets.Sum(Game1.stats.getMonstersKilled);
                 string goalName = TokenParser.ParseText(questData.DisplayName);
-                var checkbox = CheckboxListField.Checkbox(
+                var checkbox = CheckboxList.Checkbox(
                     text: I18n.Monster_AdventureGuild_EradicationGoal(name: goalName, count: kills, requiredCount: questData.Count),
                     value: kills >= questData.Count
                 );
-                yield return new CheckboxListField(I18n.Monster_AdventureGuild(), checkbox);
+                yield return new CheckboxListField(I18n.Monster_AdventureGuild(), new CheckboxList(checkbox));
             }
         }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;
 
@@ -24,30 +25,47 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="fishID">The fish ID.</param>
-        public FishSpawnRulesField(GameHelper gameHelper, string label, string fishID)
+        public FishSpawnRulesField(GameHelper gameHelper, string label, params string[] fishIDs)
             : base(label)
         {
-            this.Checkboxes = this.GetConditions(gameHelper, fishID).ToArray();
-            this.HasValue = this.Checkboxes.Any();
+            this.CheckboxLists = this.BuildCheckboxLists(gameHelper, fishIDs).ToArray();
+            this.HasValue = this.CheckboxLists.Any();
         }
 
 
         /*********
         ** Private methods
         *********/
+
+        private IEnumerable<CheckboxList> BuildCheckboxLists(GameHelper gameHelper, params string[] fishIDs)
+        {
+            foreach (string fishID in fishIDs)
+            {
+                Item fish = ItemRegistry.Create(fishID);
+
+                // get spawn data
+                FishSpawnData? spawnRules = gameHelper.GetFishSpawnRules(fish.ItemId);
+                if (spawnRules?.Locations?.Any() != true)
+                    continue;
+
+                CheckboxList checkboxes = new CheckboxList(this.GetConditions(gameHelper, spawnRules));
+                if (fishIDs.Length > 1)
+                {
+                    checkboxes.AddIntro(fish.DisplayName);
+                }
+
+                yield return checkboxes;
+            }
+        }
+
         /// <summary>Get the formatted checkbox conditions to display.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="fishID">The fish ID.</param>
-        private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetConditions(GameHelper gameHelper, string fishID)
+        private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetConditions(GameHelper gameHelper, FishSpawnData spawnRules)
         {
-            // get spawn data
-            FishSpawnData? spawnRules = gameHelper.GetFishSpawnRules(fishID);
-            if (spawnRules?.Locations?.Any() != true)
-                yield break;
-
             // not caught uet
             if (spawnRules.IsUnique)
-                yield return this.GetCondition(I18n.Item_FishSpawnRules_NotCaughtYet(), !Game1.player.fishCaught.ContainsKey(fishID));
+                yield return this.GetCondition(I18n.Item_FishSpawnRules_NotCaughtYet(), !Game1.player.fishCaught.ContainsKey(spawnRules.FishID));
 
             // fishing level
             if (spawnRules.MinFishingLevel > 0)
@@ -135,7 +153,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="isMet">Whether the condition is met.</param>
         private KeyValuePair<IFormattedText[], bool> GetCondition(string label, bool isMet)
         {
-            return CheckboxListField.Checkbox(text: label, value: isMet);
+            return CheckboxList.Checkbox(text: label, value: isMet);
         }
 
         /// <summary>Get a condition formatted for checkbox rendering.</summary>
@@ -143,7 +161,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="isMet">Whether the condition is met.</param>
         private KeyValuePair<IFormattedText[], bool> GetCondition(IEnumerable<IFormattedText> label, bool isMet)
         {
-            return CheckboxListField.Checkbox(text: label.ToArray(), value: isMet);
+            return CheckboxList.Checkbox(text: label.ToArray(), value: isMet);
         }
 
         /// <summary>Get whether all locations specify the same seasons.</summary>

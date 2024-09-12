@@ -5,9 +5,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
+using StardewValley.GameData;
+using StardewValley.GameData.Locations;
 using xTile.Layers;
 using xTile.ObjectModel;
 using xTile.Tiles;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
 {
@@ -70,6 +73,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
                         yield return new GenericField(I18n.Tile_IndexProperty(layerName: layerName, propertyName: property.Key), property.Value);
                     foreach (KeyValuePair<string, PropertyValue> property in tile.Properties)
                         yield return new GenericField(I18n.Tile_TileProperty(layerName: layerName, propertyName: property.Key), property.Value);
+                    //if (this.Location.isTileFishable((int)this.Position.X, (int)this.Position.Y))
+                    if (this.Location.TryGetFishAreaForTile(this.Position, out string id, out FishAreaData fishAreaData))
+                    {
+                        IEnumerable<string> fishIds = from spawnData in this.Location.GetData().Fish
+                                                      where spawnData.FishAreaId == id
+                                                      select spawnData.ItemId;
+                        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), fishIds.ToArray());
+                    }
                 }
             }
         }

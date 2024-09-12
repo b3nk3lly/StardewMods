@@ -140,7 +140,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
         {
             foreach (FishPondReward drop in data.ProducedItems)
-                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemId, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
+                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemId, drop.MinStack, drop.MaxStack, drop.Chance);
         }
 
         /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
