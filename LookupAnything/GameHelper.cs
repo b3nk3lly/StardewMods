@@ -375,6 +375,14 @@ internal class GameHelper
         return this.DataParser.GetLocationDisplayName(fishSpawnData);
     }
 
+    /// <summary>Get the translated display name for a location and optional fish area.</summary>
+    /// <param name="location">The location for which to get the name.</param>
+    /// <param name="fishAreaId">The fish area ID within the location, if applicable.</param>
+    public string GetLocationDisplayName(GameLocation location, string? fishAreaId)
+    {
+        return this.DataParser.GetLocationDisplayName(location.Name, location.GetData(), fishAreaId);
+    }
+
     /// <summary>Parse monster data.</summary>
     public IEnumerable<MonsterData> GetMonsterData()
     {
