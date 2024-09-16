@@ -343,6 +343,14 @@ internal class GameHelper
         return this.DataParser.GetFishSpawnRules(fish, this.Metadata);
     }
 
+    /// <summary>Read parsed data about the fish spawn rules for a specific location.</summary>
+    /// <param name="location">The location for which to get the spawn rules.</param>
+    /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
+    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location)
+    {
+        return this.DataParser.GetFishSpawnRules(location.Name, location.GetData(), this.Metadata);
+    }
+
     /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
     /// <param name="player">The player.</param>
     /// <param name="npc">The NPC.</param>

@@ -159,6 +159,36 @@ internal class DataParser
         }
     }
 
+    public IEnumerable<FishSpawnData> GetFishSpawnRules(string locationId, LocationData locationData, Metadata metadata)
+    {
+        foreach(SpawnFishData fishData in locationData.Fish)
+        {
+            ParsedItemData fish = ItemRegistry.GetData(fishData.ItemId);
+            var rule = this.GetFishSpawnRules(fish, metadata);
+            if (rule == null)
+            {
+                continue;
+            }
+
+            yield return rule;
+        }
+
+        foreach((string fishID, FishSpawnData spawnData) in metadata.CustomFishSpawnRules)
+        {
+            if (spawnData.Locations != null && spawnData.Locations.Any(loc => loc.MatchesLocation(locationId)))
+            {
+                ParsedItemData fish = ItemRegistry.GetData(fishID);
+                var rule = this.GetFishSpawnRules(fish, metadata);
+                if (rule == null)
+                {
+                    continue;
+                }
+
+                yield return rule;
+            }
+        }
+    }
+
     /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
     /// <param name="fish">The fish item data.</param>
     /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>

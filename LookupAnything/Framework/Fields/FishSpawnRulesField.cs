@@ -33,10 +33,32 @@ internal class FishSpawnRulesField : CheckboxListField
         this.HasValue = this.CheckboxLists.Any();
     }
 
+    public FishSpawnRulesField(GameHelper gameHelper, string label, GameLocation location)
+        : base(label)
+    {
+        this.CheckboxLists = this.BuildCheckboxLists(gameHelper, location).ToArray();
+        this.HasValue = this.CheckboxLists.Any();
+    }
+
 
     /*********
     ** Private methods
     *********/
+    private IEnumerable<CheckboxList> BuildCheckboxLists(GameHelper gameHelper, GameLocation location)
+    {
+        // get spawn data
+        IEnumerable<FishSpawnData> spawnRulesList = gameHelper.GetFishSpawnRules(location);
+
+        foreach (FishSpawnData spawnRules in spawnRulesList)
+        {
+            Item fish = ItemRegistry.Create(spawnRules.FishItem.ItemId);
+            yield return new(this.GetConditions(gameHelper, spawnRules))
+            {
+                IntroData = new CheckboxList.Intro(fish.DisplayName, gameHelper.GetSprite(fish))
+            };
+        }
+    }
+
     private IEnumerable<CheckboxList> BuildCheckboxLists(GameHelper gameHelper, params ParsedItemData[] fishes)
     {
         foreach (ParsedItemData fish in fishes)

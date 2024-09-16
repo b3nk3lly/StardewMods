@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.GameData.Locations;
-using System.Linq;
-using StardewValley.ItemTypeDefinitions;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles;
 
@@ -40,38 +38,10 @@ internal class FishingAreaSubject : TileSubject
     /// <inheritdoc/>
     public override IEnumerable<ICustomField> GetData()
     {
-        IEnumerable<ParsedItemData> fishes = from spawn in this.LocationData.Fish
-                                             where spawn.ItemId != null && this.IsSpawnPossible(spawn)
-                                             orderby spawn.Precedence
-                                             select ItemRegistry.GetData(spawn.ItemId);
-
-        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), fishes.ToArray());
+        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), this.Location);
 
         // raw map data
         foreach (ICustomField field in base.GetData())
             yield return field;
-    }
-
-    /*********
-    ** Private methods
-    *********/
-    /// <summary>Gets whether a fish can spawn in this area.</summary>
-    /// <param name="spawn">The fish spawn data that describes the fish to test.</param>
-    /// <remarks>Derived from <see cref="GameLocation.GetFishFromLocationData"/>.</remarks>
-    private bool IsSpawnPossible(SpawnFishData spawn)
-    {
-        // check if fish can spawn in this body of water
-        if (spawn.FishAreaId != null && spawn.FishAreaId != this.FishAreaId)
-            return false;
-
-        // check if bobber is in proper position
-        if (spawn.BobberPosition.HasValue && !spawn.BobberPosition.GetValueOrDefault().Contains((int)this.Position.X, (int)this.Position.Y))
-            return false;
-
-        // check if player is in proper position
-        if (spawn.PlayerPosition.HasValue && !spawn.PlayerPosition.GetValueOrDefault().Contains(Game1.player.TilePoint.X, Game1.player.TilePoint.Y))
-            return false;
-
-        return true;
     }
 }
