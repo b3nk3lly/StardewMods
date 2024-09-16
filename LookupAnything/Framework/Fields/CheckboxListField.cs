@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.UI;
@@ -41,6 +42,7 @@ internal class CheckboxListField : GenericField
         float checkboxSize = CommonSprites.Icons.FilledCheckbox.Width * (Game1.pixelZoom / 2);
         float lineHeight = Math.Max(checkboxSize, Game1.smallFont.MeasureString("ABC").Y);
         float checkboxOffset = (lineHeight - checkboxSize) / 2;
+        CheckboxList lastList = this.CheckboxLists.Last();
 
         foreach (CheckboxList checkboxList in this.CheckboxLists)
         {
@@ -70,7 +72,8 @@ internal class CheckboxListField : GenericField
             }
 
             // update offset for next list
-            topOffset += lineHeight;
+            if (!checkboxList.Equals(lastList))
+                topOffset += lineHeight;
         }
 
         return new Vector2(wrapWidth, topOffset);
