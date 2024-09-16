@@ -22,13 +22,13 @@ internal class FishingAreaSubject : TileSubject
     /// <param name="location">The game location.</param>
     /// <param name="position">The tile position.</param>
     /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-    /// <param name="fishAreaId">The internal name of the fishing area to which this tile belongs.</param>
-    public FishingAreaSubject(GameHelper gameHelper, GameLocation location, Vector2 position, bool showRawTileInfo, string fishAreaId) : base(gameHelper, location, position, showRawTileInfo)
+    public FishingAreaSubject(GameHelper gameHelper, GameLocation location, Vector2 position, bool showRawTileInfo) : base(gameHelper, location, position, showRawTileInfo)
     {
-        this.Name = this.GameHelper.GetLocationDisplayName(location, fishAreaId);
+        location.TryGetFishAreaForTile(position, out this.FishAreaId, out _);
+
+        this.Name = this.GameHelper.GetLocationDisplayName(location, this.FishAreaId);
         this.Description = null;
         this.Type = I18n.Type_FishingArea();
-        this.FishAreaId = fishAreaId;
     }
 
     /// <inheritdoc/>
