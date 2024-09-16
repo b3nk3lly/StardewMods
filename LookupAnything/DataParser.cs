@@ -159,32 +159,29 @@ internal class DataParser
         }
     }
 
-    public IEnumerable<FishSpawnData> GetFishSpawnRules(string locationId, LocationData locationData, Metadata metadata)
+    /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
+    /// <param name="location">The location for which to get the spawn rules.</param>
+    /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Metadata metadata)
     {
-        foreach(SpawnFishData fishData in locationData.Fish)
+        foreach (SpawnFishData fishData in location.GetData().Fish)
         {
             ParsedItemData fish = ItemRegistry.GetData(fishData.ItemId);
-            var rule = this.GetFishSpawnRules(fish, metadata);
-            if (rule == null)
-            {
-                continue;
-            }
+            FishSpawnData? rules = this.GetFishSpawnRules(fish, metadata);
 
-            yield return rule;
+            if (rules != null)
+                yield return rules;
         }
 
         foreach((string fishID, FishSpawnData spawnData) in metadata.CustomFishSpawnRules)
         {
-            if (spawnData.Locations != null && spawnData.Locations.Any(loc => loc.MatchesLocation(locationId)))
+            if (spawnData.Locations != null && spawnData.Locations.Any(loc => loc.MatchesLocation(location.Name)))
             {
                 ParsedItemData fish = ItemRegistry.GetData(fishID);
-                var rule = this.GetFishSpawnRules(fish, metadata);
-                if (rule == null)
-                {
-                    continue;
-                }
+                FishSpawnData? rules = this.GetFishSpawnRules(fish, metadata);
 
-                yield return rule;
+                if (rules != null)
+                    yield return rules;
             }
         }
     }

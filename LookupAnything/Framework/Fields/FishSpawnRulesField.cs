@@ -25,18 +25,22 @@ internal class FishSpawnRulesField : CheckboxListField
     /// <summary>Construct an instance.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
     /// <param name="label">A short field label.</param>
-    /// <param name="fishes">The fish item data.</param>
-    public FishSpawnRulesField(GameHelper gameHelper, string label, params ParsedItemData[] fishes)
+    /// <param name="fish">The fish item data.</param>
+    public FishSpawnRulesField(GameHelper gameHelper, string label, ParsedItemData fish)
         : base(label)
     {
-        this.CheckboxLists = this.BuildCheckboxLists(gameHelper, fishes).ToArray();
+        this.CheckboxLists = this.GetConditions(gameHelper, fish).ToArray();
         this.HasValue = this.CheckboxLists.Any();
     }
 
+    /// <summary>Construct an instance.</summary>
+    /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="label">A short field label.</param>
+    /// <param name="location">The location whose fish spawn conditions to get.</param>
     public FishSpawnRulesField(GameHelper gameHelper, string label, GameLocation location)
         : base(label)
     {
-        this.CheckboxLists = this.BuildCheckboxLists(gameHelper, location).ToArray();
+        this.CheckboxLists = this.GetConditions(gameHelper, location).ToArray();
         this.HasValue = this.CheckboxLists.Any();
     }
 
@@ -44,12 +48,12 @@ internal class FishSpawnRulesField : CheckboxListField
     /*********
     ** Private methods
     *********/
-    private IEnumerable<CheckboxList> BuildCheckboxLists(GameHelper gameHelper, GameLocation location)
+    /// <summary>Get the formatted checkbox conditions to display.</summary>
+    /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="location">The location whose fish spawn conditions to get.</param>
+    private IEnumerable<CheckboxList> GetConditions(GameHelper gameHelper, GameLocation location)
     {
-        // get spawn data
-        IEnumerable<FishSpawnData> spawnRulesList = gameHelper.GetFishSpawnRules(location);
-
-        foreach (FishSpawnData spawnRules in spawnRulesList)
+        foreach (FishSpawnData spawnRules in gameHelper.GetFishSpawnRules(location))
         {
             Item fish = ItemRegistry.Create(spawnRules.FishItem.ItemId);
             yield return new(this.GetConditions(gameHelper, spawnRules))
@@ -59,29 +63,22 @@ internal class FishSpawnRulesField : CheckboxListField
         }
     }
 
-    private IEnumerable<CheckboxList> BuildCheckboxLists(GameHelper gameHelper, params ParsedItemData[] fishes)
+    /// <summary>Get the formatted checkbox conditions to display.</summary>
+    /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+    /// <param name="fish">The fish item data.</param>
+    private IEnumerable<CheckboxList> GetConditions(GameHelper gameHelper, ParsedItemData fish)
     {
-        foreach (ParsedItemData fish in fishes)
-        {
-            // get spawn data
-            FishSpawnData? spawnRules = gameHelper.GetFishSpawnRules(fish);
-            if (spawnRules?.Locations?.Any() != true)
-                continue;
+        // get spawn data
+        FishSpawnData? spawnRules = gameHelper.GetFishSpawnRules(fish);
+        if (spawnRules?.Locations?.Any() != true)
+            yield break;
 
-            CheckboxList checkboxes = new CheckboxList(this.GetConditions(gameHelper, spawnRules));
-            if (fishes.Length > 1)
-            {
-                Item fishItem = ItemRegistry.Create(fish.ItemId);
-                checkboxes.IntroData = new CheckboxList.Intro(fish.DisplayName, gameHelper.GetSprite(fishItem));
-            }
-
-            yield return checkboxes;
-        }
+        yield return new(this.GetConditions(gameHelper, spawnRules));
     }
 
     /// <summary>Get the formatted checkbox conditions to display.</summary>
     /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-    /// <param name="spawnRules">The fish spawn data.</param>
+    /// <param name="spawnRules">The fish spawn rules to format.</param>
     private IEnumerable<CheckboxList.Checkbox> GetConditions(GameHelper gameHelper, FishSpawnData spawnRules)
     {
         // not caught uet
@@ -116,7 +113,7 @@ internal class FishSpawnRulesField : CheckboxListField
         }
 
         // locations & seasons
-        if (this.HaveSameSeasons(spawnRules.Locations))
+        if (this.HaveSameSeasons(spawnRules.Locations) && spawnRules.Locations.Length > 0)
         {
             var firstLocation = spawnRules.Locations[0];
 

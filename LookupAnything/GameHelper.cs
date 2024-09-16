@@ -348,7 +348,7 @@ internal class GameHelper
     /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
     public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location)
     {
-        return this.DataParser.GetFishSpawnRules(location.Name, location.GetData(), this.Metadata);
+        return this.DataParser.GetFishSpawnRules(location, this.Metadata);
     }
 
     /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
