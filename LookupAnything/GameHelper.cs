@@ -345,10 +345,12 @@ internal class GameHelper
 
     /// <summary>Read parsed data about the fish spawn rules for a specific location.</summary>
     /// <param name="location">The location for which to get the spawn rules.</param>
+    /// <param name="tile">The tile for which to get the spawn rules.</param>
+    /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
     /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
-    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location)
+    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Vector2 tile, string fishAreaId)
     {
-        return this.DataParser.GetFishSpawnRules(location, this.Metadata);
+        return this.DataParser.GetFishSpawnRules(location, tile, fishAreaId, this.Metadata);
     }
 
     /// <summary>Get parsed data about the friendship between a player and NPC.</summary>

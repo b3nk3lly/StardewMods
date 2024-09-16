@@ -161,11 +161,25 @@ internal class DataParser
 
     /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
     /// <param name="location">The location for which to get the spawn rules.</param>
+    /// <param name="tile">The tile for which to get the spawn rules.</param>
+    /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
     /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Metadata metadata)
+    public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Vector2 tile, string fishAreaId, Metadata metadata)
     {
         foreach (SpawnFishData fishData in location.GetData().Fish)
         {
+            // check if fish can spawn in this body of water
+            if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
+                continue;
+
+            // check if bobber is in proper position
+            if (fishData.BobberPosition.HasValue && !fishData.BobberPosition.GetValueOrDefault().Contains((int)tile.X, (int)tile.Y))
+                continue;
+
+            // check if player is in proper position
+            if (fishData.PlayerPosition.HasValue && !fishData.PlayerPosition.GetValueOrDefault().Contains(Game1.player.TilePoint.X, Game1.player.TilePoint.Y))
+                continue;
+
             ParsedItemData fish = ItemRegistry.GetData(fishData.ItemId);
             FishSpawnData? rules = this.GetFishSpawnRules(fish, metadata);
 

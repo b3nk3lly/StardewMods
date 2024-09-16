@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
-using StardewValley.GameData.Locations;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles;
 
@@ -14,8 +13,6 @@ internal class FishingAreaSubject : TileSubject
     *********/
     /// <summary>The fish area ID which applies, if any.</summary>
     private readonly string FishAreaId;
-    ///<summary>The game location to which this area belongs.</summary>
-    private readonly LocationData LocationData;
 
     /*********
     ** Public methods
@@ -32,13 +29,12 @@ internal class FishingAreaSubject : TileSubject
         this.Description = null;
         this.Type = "Fishing area";
         this.FishAreaId = fishAreaId;
-        this.LocationData = location.GetData();
     }
 
     /// <inheritdoc/>
     public override IEnumerable<ICustomField> GetData()
     {
-        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), this.Location);
+        yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), this.Location, this.Position, this.FishAreaId);
 
         // raw map data
         foreach (ICustomField field in base.GetData())
