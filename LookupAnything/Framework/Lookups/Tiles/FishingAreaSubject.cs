@@ -27,7 +27,7 @@ internal class FishingAreaSubject : TileSubject
     {
         this.Name = this.GameHelper.GetLocationDisplayName(location, fishAreaId);
         this.Description = null;
-        this.Type = "Fishing area";
+        this.Type = I18n.Type_FishingArea();
         this.FishAreaId = fishAreaId;
     }
 
