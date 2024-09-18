@@ -157,7 +157,7 @@ internal class FishSpawnRulesField : CheckboxListField
         }
 
         // locations & seasons
-        if (this.HaveSameSeasons(spawnRules.Locations))
+        if (spawnRules.Locations != null && spawnRules.Locations.Any() && this.HaveSameSeasons(spawnRules.Locations))
         {
             var firstLocation = spawnRules.Locations[0];
 
