@@ -409,6 +409,7 @@
     "item.fish-spawn-rules.time": "一天中出现时间： {{times}}",
     "item.fish-spawn-rules.weather-sunny": "天气：晴天",
     "item.fish-spawn-rules.weather-rainy": "天气：雨天",
+    "item.fish-unknown-spawn-rules": "{{count}} unknown spawn rules", // TODO
 
 
     /*********
@@ -689,6 +690,9 @@
 
     "config.progression.show-unknown-recipes.name": "显示未知的配方",
     "config.progression.show-unknown-recipes.desc": "是否显示游戏中尚未学习的配方。",
+
+    "config.progression.show-unknown-spawn-rules.name": "Show unknown spawn rules", // TODO
+    "config.progression.show-unknown-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-puzzle-solutions.name": "显示谜题的解决方法",
     "config.progression.show-puzzle-solutions.desc": "是否显示谜题的解决方法。",

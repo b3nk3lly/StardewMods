@@ -408,6 +408,7 @@
     "item.fish-spawn-rules.time": "время суток: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "погода: солнечно",
     "item.fish-spawn-rules.weather-rainy": "погода: дождь",
+    "item.fish-unknown-spawn-rules": "{{count}} unknown spawn rules", // TODO
 
 
     /*********
@@ -688,6 +689,9 @@
 
     "config.progression.show-unknown-recipes.name": "Показывать неизвестные рецепты",
     "config.progression.show-unknown-recipes.desc": "Показывать ли рецепты, которые вы еще не выучили в игре.",
+
+    "config.progression.show-unknown-spawn-rules.name": "Show unknown spawn rules", // TODO
+    "config.progression.show-unknown-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-puzzle-solutions.name": "Показывать решения головоломок",
     "config.progression.show-puzzle-solutions.desc": "Показывать ли решения головоломок",

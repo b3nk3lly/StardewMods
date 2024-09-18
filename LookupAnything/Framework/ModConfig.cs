@@ -25,6 +25,9 @@ internal class ModConfig
     /// <summary>Whether to show puzzle solutions.</summary>
     public bool ShowPuzzleSolutions { get; set; } = true;
 
+    /// <summary>Whether to show spawn conditions of uncaught fish.</summary>
+    public bool ShowUncaughtFishSpawnRules { get; set; } = true;
+
     /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
     public bool HighlightUnrevealedGiftTastes { get; set; }
 

@@ -69,7 +69,7 @@ internal class TileLookupProvider : BaseLookupProvider
             return new IslandShrinePuzzleSubject(this.GameHelper, location, tile, showRaw, config.ShowPuzzleSolutions);
 
         if (this.IsFishingArea(location, tile))
-            return new FishingAreaSubject(this.GameHelper, location, tile, showRaw);
+            return new FishingAreaSubject(this.GameHelper, location, tile, showRaw, config.ShowUncaughtFishSpawnRules);
 
         if (showRaw)
             return new TileSubject(this.GameHelper, location, tile, true);

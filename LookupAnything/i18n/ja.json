@@ -408,6 +408,7 @@
     "item.fish-spawn-rules.time": "釣れる時間：{{times}}",
     "item.fish-spawn-rules.weather-sunny": "天気：晴れ",
     "item.fish-spawn-rules.weather-rainy": "天気：雨",
+    "item.fish-unknown-spawn-rules": "{{count}} unknown spawn rules", // TODO
 
 
     /*********
@@ -688,6 +689,9 @@
 
     "config.progression.show-unknown-recipes.name": "未知のレシピを表示",
     "config.progression.show-unknown-recipes.desc": "ゲーム内でまだ覚えていないレシピを表示する。",
+
+    "config.progression.show-unknown-spawn-rules.name": "Show unknown spawn rules", // TODO
+    "config.progression.show-unknown-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-puzzle-solutions.name": "パズルの解答を表示",
     "config.progression.show-puzzle-solutions.desc": "パズルの解答を表示する。",

@@ -65,6 +65,12 @@ internal class GenericModConfigMenuIntegrationForLookupAnything
                 set: (config, value) => config.ShowUnknownRecipes = value
             )
             .AddCheckbox(
+                    name: I18n.Config_Progression_ShowUnknownSpawnRules_Name,
+                    tooltip: I18n.Config_Progression_ShowUnknownSpawnRules_Desc,
+                    get: config => config.ShowUncaughtFishSpawnRules,
+                    set: (config, value) => config.ShowUncaughtFishSpawnRules = value
+                )
+            .AddCheckbox(
                 name: I18n.Config_Progression_ShowPuzzleSolutions_Name,
                 tooltip: I18n.Config_Progression_ShowPuzzleSolutions_Desc,
                 get: config => config.ShowPuzzleSolutions,

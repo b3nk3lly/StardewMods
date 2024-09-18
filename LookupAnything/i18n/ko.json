@@ -408,6 +408,7 @@
     "item.fish-spawn-rules.time": "시간: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "날씨: 맑은 날",
     "item.fish-spawn-rules.weather-rainy": "날씨: 비 오는 날",
+    "item.fish-unknown-spawn-rules": "{{count}} unknown spawn rules", // TODO
 
 
     /*********
@@ -688,6 +689,9 @@
 
     "config.progression.show-unknown-recipes.name": "모르는 레시피 보기",
     "config.progression.show-unknown-recipes.desc": "게임 내에서 아직 배우지 않은 레시피를 표시할지 여부.",
+
+    "config.progression.show-unknown-spawn-rules.name": "Show unknown spawn rules", // TODO
+    "config.progression.show-unknown-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-puzzle-solutions.name": "퍼즐 해답 보기",
     "config.progression.show-puzzle-solutions.desc": "퍼즐 해답 표시 여부.",

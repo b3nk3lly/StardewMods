@@ -408,6 +408,7 @@
     "item.fish-spawn-rules.time": "pora dnia: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "pogoda: słonecznie",
     "item.fish-spawn-rules.weather-rainy": "pogoda: deszczowo",
+    "item.fish-unknown-spawn-rules": "{{count}} unknown spawn rules", // TODO
 
 
     /*********
@@ -691,6 +692,9 @@
 
     "config.progression.show-puzzle-solutions.name": "Pokaż rozwiązania zagadek",
     "config.progression.show-puzzle-solutions.desc": "Czy pokazywać rozwiązania zagadek.",
+
+    "config.progression.show-unknown-spawn-rules.name": "Show unknown spawn rules", // TODO
+    "config.progression.show-unknown-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     // gift tastes
     "config.title.gift-tastes": "Upodobania prezentowe",

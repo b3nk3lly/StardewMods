@@ -408,6 +408,7 @@
     "item.fish-spawn-rules.time": "günün saati: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "hava: güneşli",
     "item.fish-spawn-rules.weather-rainy": "hava: yağmurlu",
+    "item.fish-unknown-spawn-rules": "{{count}} unknown spawn rules", // TODO
 
 
     /*********
@@ -688,6 +689,9 @@
 
     "config.progression.show-unknown-recipes.name": "Bilinmeyen tarifleri göster",
     "config.progression.show-unknown-recipes.desc": "Oyun içinde keşfedilmemiş tariflerin gösterilip gösterilmeyeceği",
+
+    "config.progression.show-unknown-spawn-rules.name": "Show unknown spawn rules", // TODO
+    "config.progression.show-unknown-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-puzzle-solutions.name": "Bulmacaların çözümlerini göster",
     "config.progression.show-puzzle-solutions.desc": "Bulmacaların çözümlerinin gösterilip gösterilmeyeceği",

@@ -407,6 +407,7 @@
     "item.fish-spawn-rules.time": "orario: {{times}}",
     "item.fish-spawn-rules.weather-sunny": "tempo meteo: soleggiato",
     "item.fish-spawn-rules.weather-rainy": "tempo meteo: pioggia",
+    "item.fish-unknown-spawn-rules": "{{count}} unknown spawn rules", // TODO
 
 
     /*********
@@ -687,6 +688,9 @@
 
     "config.progression.show-unknown-recipes.name": "Mostra ricette sconosciute",
     "config.progression.show-unknown-recipes.desc": "Scegli se mostrare le ricette che non si sono ancora imparate nel gioco.",
+
+    "config.progression.show-unknown-spawn-rules.name": "Show unknown spawn rules", // TODO
+    "config.progression.show-unknown-spawn-rules.desc": "Whether to show spawn conditions for fish you haven't caught yet.", // TODO
 
     "config.progression.show-puzzle-solutions.name": "Mostra soluzioni dei puzzle",
     "config.progression.show-puzzle-solutions.desc": "Scegli se mostrare le soluzioni dei puzzle.",
