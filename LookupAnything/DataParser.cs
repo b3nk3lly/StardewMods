@@ -168,6 +168,9 @@ internal class DataParser
     {
         foreach (SpawnFishData fishData in location.GetData().Fish)
         {
+            if (fishData.ItemId == null)
+                continue;
+
             // check if fish can spawn in this body of water
             if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
                 continue;
