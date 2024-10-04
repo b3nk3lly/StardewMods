@@ -183,7 +183,11 @@ internal class DataParser
             if (fishData.PlayerPosition.HasValue && !fishData.PlayerPosition.GetValueOrDefault().Contains(Game1.player.TilePoint.X, Game1.player.TilePoint.Y))
                 continue;
 
-            ParsedItemData fish = ItemRegistry.GetData(fishData.ItemId);
+            // check if data is for a fish (or jelly)
+            ParsedItemData? fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
+            if (fish?.ObjectType != "Fish")
+                continue;
+
             FishSpawnData? rules = this.GetFishSpawnRules(fish, metadata);
 
             if (rules != null)
