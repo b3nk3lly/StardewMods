@@ -8,8 +8,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
     /// A list of checkboxes with labels. The list may optionally contain intro text with
     /// an icon.
     /// </summary>
-    /// <param name="checkboxes"></param>
-    internal class CheckboxList(params CheckboxList.Checkbox[] checkboxes)
+    /// <param name="checkboxes">The checkbox values to display.</param>
+    internal class CheckboxList(CheckboxList.Checkbox[] checkboxes)
     {
         /// <summary>The text and icon to display above a list of checkboxes.</summary>
         /// <param name="text">The text to display above the checkboxes.</param>
