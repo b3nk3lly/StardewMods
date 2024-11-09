@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
     /// an icon.
     /// </summary>
     /// <param name="checkboxes">The checkbox values to display.</param>
-    internal class CheckboxList(CheckboxList.Checkbox[] checkboxes)
+    internal class CheckboxList(CheckboxList.Checkbox[] checkboxes, bool isHidden = false)
     {
         /// <summary>The text and icon to display above a list of checkboxes.</summary>
         /// <param name="text">The text to display above the checkboxes.</param>
@@ -53,6 +53,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         *********/
         /// <summary>The checkbox values to display.</summary>
         public Checkbox[] Checkboxes { get; } = checkboxes;
+
+        /// <summary>Whether to hide the list when drawing (e.g., when using progression mode)</summary>
+        public bool IsHidden { get; } = isHidden;
 
         /// <summary>The intro text to show before the checkboxes.</summary>
         public Intro? IntroData { get; set; }
