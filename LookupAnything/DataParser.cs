@@ -159,17 +159,22 @@ internal class DataParser
         }
     }
 
-    /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
+    /// <summary>Read parsed data about the spawn rules for fish in a specific location.</summary>
     /// <param name="location">The location for which to get the spawn rules.</param>
     /// <param name="tile">The tile for which to get the spawn rules.</param>
     /// <param name="fishAreaId">The internal ID of the fishing area for which to get the spawn rules.</param>
     /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
     public IEnumerable<FishSpawnData> GetFishSpawnRules(GameLocation location, Vector2 tile, string fishAreaId, Metadata metadata)
     {
+        HashSet<string> seenFishIDs = [];
+
+        // parse game data
         foreach (SpawnFishData fishData in location.GetData().Fish)
         {
             if (fishData.ItemId == null)
                 continue;
+
+            seenFishIDs.Add(fishData.ItemId);
 
             // check if fish can spawn in this body of water
             if (fishData.FishAreaId != null && fishData.FishAreaId != fishAreaId)
@@ -183,27 +188,27 @@ internal class DataParser
             if (fishData.PlayerPosition.HasValue && !fishData.PlayerPosition.GetValueOrDefault().Contains(Game1.player.TilePoint.X, Game1.player.TilePoint.Y))
                 continue;
 
-            // check if data is for a fish (or jelly)
-            ParsedItemData? fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
-            if (fish?.ObjectType != "Fish")
+            // check if data is for a fish or jelly (i.e., not furniture)
+            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishData.ItemId);
+            if (fish.ObjectType != "Fish")
                 continue;
 
-            FishSpawnData? rules = this.GetFishSpawnRules(fish, metadata);
-
-            if (rules != null)
-                yield return rules;
+            yield return this.GetFishSpawnRules(fish, metadata);
         }
 
+        // parse metadata
         foreach((string fishID, FishSpawnData spawnData) in metadata.CustomFishSpawnRules)
         {
-            if (spawnData.Locations != null && spawnData.Locations.Any(loc => loc.MatchesLocation(location.Name)))
-            {
-                ParsedItemData fish = ItemRegistry.GetData(fishID);
-                FishSpawnData? rules = this.GetFishSpawnRules(fish, metadata);
+            // skip if we already checked this fish, even if we rejected it (e.g., due to spawning only in a certain fishing area in a location)
+            if (seenFishIDs.Contains(fishID))
+                continue;
 
-                if (rules != null)
-                    yield return rules;
-            }
+            // skip if spawn location doesn't match
+            if (spawnData.Locations == null || !spawnData.Locations.Any(loc => loc.MatchesLocation(location.Name)))
+                continue;
+
+            ParsedItemData fish = ItemRegistry.GetDataOrErrorItem(fishID);
+            yield return this.GetFishSpawnRules(fish, metadata);
         }
     }
 
