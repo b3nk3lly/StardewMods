@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 
@@ -9,6 +10,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 /// <param name="Seasons">The required seasons.</param>
 internal record FishSpawnLocationData(string LocationId, string? Area, HashSet<string> Seasons)
 {
+    /*********
+    ** Fields
+    *********/
+    /// <summary>A regex pattern matching the UndergroundMine location with an optional mine level.</summary>
+    private static readonly Regex MineLevelPattern = new(@"UndergroundMine(\d*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
     /*********
     ** Public methods
     *********/
@@ -30,11 +37,23 @@ internal record FishSpawnLocationData(string LocationId, string? Area, HashSet<s
     /// <param name="locationId">The location internal name to match.</param>
     public bool MatchesLocation(string locationId)
     {
-        // specific mine level (e.g. Lava Eel in UndergroundMine100)
-        if (this.LocationId == "UndergroundMine" && !string.IsNullOrWhiteSpace(this.Area))
-            return locationId == $"{this.LocationId}{this.Area}";
+        // special case: mine level
+        {
+            Match mineLevel = MineLevelPattern.Match(locationId);
 
-        // location name
+            if (mineLevel.Success)
+            {
+                string level = mineLevel.Groups[1].Value;
+
+                // specific mine level (e.g. Lava Eel in UndergroundMine100)
+                if (!string.IsNullOrWhiteSpace(level) && !string.IsNullOrWhiteSpace(this.Area))
+                    return locationId == $"{this.LocationId}{this.Area}";
+                // any mine level (e.g., Ghost Fish, Cave Jelly)
+                else
+                    return locationId == $"{this.LocationId}{level}";
+            }
+        }
+
         return locationId == this.LocationId;
     }
 }
